@@ -10,6 +10,7 @@ from airflow.operators.bash import BashOperator
 with DAG(
     dag_id="example_python1",
     start_date=datetime(2025,1,1),
+    schedule_interval=timedelta(minutes=15),
     schedule=None,
     catchup=False,
     default_args={"retries": 1}
