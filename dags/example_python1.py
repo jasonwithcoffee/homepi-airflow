@@ -46,7 +46,7 @@ with DAG(
         url = "https://meowfacts.herokuapp.com/"
         response = http_request(url)
         data = {}
-        data['data'] = response['data']
+        data['data'] = response['data'][0]
         # Get current date and time
         now = datetime.now()
         data['timestamp'] = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -56,11 +56,15 @@ with DAG(
 
     def get_filename():
         # Define target directory
-        target_directory = "~/data/staging/"
-        expanded_directory = os.path.expanduser(target_directory)
+        target_directory = "/opt/airflow/data/staging/"
+        # expanded_directory = os.path.expanduser(target_directory)
+        
 
         # Create the directory if it doesn't exist
-        os.makedirs(expanded_directory, exist_ok=True)
+        os.makedirs(target_directory, exist_ok=True)
+        contents = os.listdir(target_directory)
+        print(target_directory)
+        print(contents)
 
         # Get current date and time
         now = datetime.now()
@@ -68,8 +72,9 @@ with DAG(
         # Format date and time as a string
         filename = now.strftime("file_%Y%m%d_%H%M.json")
 
+        print(filename)
         # Join the directory and filename
-        filepath = expanded_directory + filename
+        filepath = target_directory + filename
         return filepath
     
     def get_data_and_save():
